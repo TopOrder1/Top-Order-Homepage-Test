@@ -16,7 +16,7 @@
      ------------------------------------------------------------------ */
   var lenis = null;
   if (!reduceMotion && !isTouch && typeof window.Lenis !== "undefined") {
-    lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+    lenis = new Lenis({ duration: 0.6, smoothWheel: true });
     lenis.on("scroll", hasGSAP && window.ScrollTrigger ? ScrollTrigger.update : undefined);
     function raf(time) {
       lenis.raf(time);
