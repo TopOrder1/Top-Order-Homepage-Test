@@ -2,7 +2,7 @@
 
 Marketing site for Top Order Digital: websites for local trades and services in
 Perth's northern suburbs. Built with [Astro](https://astro.build) as a static
-site, deployed to Cloudflare Pages.
+site, deployed to Cloudflare via Workers Builds.
 
 Converted from the Claude Design wireframe in `../wireframe/`.
 
@@ -29,7 +29,8 @@ Requires Node 18.20+ / 20.3+ / 22+.
 
 ```
 site/
-├── astro.config.mjs      site URL, sitemap integration
+├── astro.config.mjs      site URL and build options
+├── wrangler.jsonc        Cloudflare Worker: serves dist/ as static assets
 ├── src/
 │   ├── data/site.ts      ← ALL content: copy, pricing, suburbs, portfolio, FAQs
 │   ├── styles/global.css  design system (brand tokens, buttons, cards…)
@@ -44,8 +45,8 @@ site/
 │   ├── favicon.svg/png, apple-touch-icon.png, site.webmanifest
 │   ├── og-image.png       generated from assets-src/og-image.svg at build time
 │   ├── robots.txt
-│   ├── _redirects         old wireframe URLs → new paths (Cloudflare Pages)
-│   └── _headers           security + cache headers (Cloudflare Pages)
+│   ├── _redirects         common old-URL guesses → new paths
+│   └── _headers           security + cache headers
 ├── assets-src/og-image.svg   source for the social share image
 └── scripts/generate-og.mjs   SVG → public/og-image.png (runs on predev/prebuild)
 ```
@@ -74,7 +75,7 @@ and receives mail before go-live.
 1. Go to web3forms.com, enter `simon@toporderdigital.com.au`, and copy the access key
    from the confirmation email.
 2. Local: `cp .env.example .env` and paste the key into `PUBLIC_WEB3FORMS_KEY`.
-3. Cloudflare Pages: **Settings → Environment variables** → add
+3. Cloudflare: **Settings → Variables** → add
    `PUBLIC_WEB3FORMS_KEY` with the same value (Production + Preview).
 
 The key is a public submit token — safe to expose in the built HTML. It can only
@@ -85,22 +86,46 @@ own captcha from their dashboard if spam gets through.
 
 ---
 
-## Deploying to Cloudflare Pages
+## Deploying
 
-- **Framework preset:** Astro
-- **Build command:** `npm run build`
-- **Build output directory:** `dist`
-- **Root directory:** `site` (if this repo has other folders at the top level)
-- **Environment variables:** `PUBLIC_WEB3FORMS_KEY` (see above)
+This deploys through **Cloudflare Workers Builds**, not Cloudflare Pages. The
+difference matters: Workers has no "framework preset" or "build output
+directory" setting in the dashboard. The output folder is declared in
+`wrangler.jsonc` instead.
 
-`_redirects` and `_headers` in `public/` are picked up automatically. Point
-`toporderdigital.com.au` at the Pages project under **Custom domains**.
+Dashboard (**Settings → Build configuration**):
+
+| Field | Value |
+|---|---|
+| Build command | `npm run build` |
+| Deploy command | `npx wrangler deploy` |
+| Version command | `npx wrangler versions upload` |
+| Root directory | `/` |
+
+`wrangler.jsonc` declares `assets.directory: "./dist"` and serves
+`dist/404.html` for unknown paths. **Its `name` must match the Worker's real
+name**, or `wrangler deploy` silently creates a second Worker and the custom
+domain keeps serving the old one.
+
+Environment variables live under **Settings → Variables**: add
+`PUBLIC_WEB3FORMS_KEY` (see above).
+
+`_redirects` and `_headers` in `public/` are honoured by Workers static assets.
+
+### Dependency versions are pinned
+
+`package.json` uses exact versions, not carets, and there's no lockfile
+committed. That's deliberate: the first CI build failed because a caret let
+`@astrojs/sitemap` resolve to a version built for the next major of Astro. If
+you bump a version, watch the build.
 
 ### Redirects from the old site
 
-`public/_redirects` maps the old Claude Design prototype URLs
-(`/Pricing.dc.html` etc.) and common alternates to the new paths. Add any real
-old URLs you find in Search Console once it's connected.
+The site this replaced was a single page at `/`, so there's nothing to migrate —
+`/` still exists, and its `#top`, `#about`, `#work` and `#pricing` anchors are
+preserved on the new homepage. `public/_redirects` only covers common guesses
+(`/services`, `/portfolio`). Add any real old URLs that show up in Search
+Console once it's connected.
 
 ---
 
@@ -118,7 +143,7 @@ the `predev` / `prebuild` scripts from `package.json`.
 - Per-page `<title>` and meta descriptions, Open Graph + Twitter tags, canonical
   URLs — all in `BaseLayout.astro`.
 - `ProfessionalService` structured data with the full service-area suburb list.
-- `@astrojs/sitemap` builds `/sitemap-index.xml`; `robots.txt` points to it.
+- `src/pages/sitemap.xml.ts` builds `/sitemap.xml` at compile time; `robots.txt` points to it. Add new routes to the list in that file.
 - Target terms (from the brief): "website for tradies Perth", "web designer for
   trades Perth", plus per-suburb long-tail. As the trade demo sites get built,
   give each trade/suburb its own page and link them from `/work`.

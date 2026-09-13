@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://toporderdigital.com.au/sitemap-index.xml
+Sitemap: https://toporderdigital.com.au/sitemap.xml

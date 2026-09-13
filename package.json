@@ -12,11 +12,11 @@
     "preview": "astro preview",
     "astro": "astro"
   },
+  "//": "Versions are pinned exactly, not with carets. There is no lockfile committed, so a caret lets the CI build resolve a newer major of a dependency than the one this was written against — which is exactly how the sitemap integration broke the first build.",
   "dependencies": {
-    "astro": "^4.16.18",
-    "@astrojs/sitemap": "^3.2.1"
+    "astro": "4.16.19"
   },
   "devDependencies": {
-    "sharp": "^0.33.5"
+    "sharp": "0.33.5"
   }
 }
