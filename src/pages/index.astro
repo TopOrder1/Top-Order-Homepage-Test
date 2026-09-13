@@ -44,7 +44,7 @@ const description =
       </ul>
 
       <div class="hero__stage">
-        <div class="hero__panel">
+        <div class="hero__panel" data-hero-panel>
           <span class="hero__panel-bar" aria-hidden="true"><span></span><span></span><span></span></span>
           <video
             data-hero-video
@@ -52,11 +52,14 @@ const description =
             muted
             loop
             playsinline
-            preload="metadata"
+            preload="none"
             aria-label="Top Order Digital brand animation"
           ></video>
-          <button type="button" class="hero-video__sound" data-sound-toggle hidden>
-            Sound on
+          <button type="button" class="hero__play" data-hero-play hidden>
+            <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+              <path d="M9 5.5v15l13-7.5z" fill="currentColor" />
+            </svg>
+            <span class="visually-hidden">Play the brand animation</span>
           </button>
         </div>
 
@@ -324,30 +327,35 @@ const description =
   .hero__panel video {
     width: 100%;
     border-radius: 14px;
-    background: var(--navy);
     aspect-ratio: 16 / 9;
     object-fit: cover;
     display: block;
+    /* Stands in for a poster: an unstarted video paints transparent, so the
+       logo shows through until the first frame arrives. Means the panel is
+       never an empty box when autoplay is refused. */
+    background: var(--navy) url("/assets/logo-horizontal-white.png") no-repeat center;
+    background-size: min(320px, 55%);
   }
 
-  .hero-video__sound {
+  .hero__play {
     position: absolute;
-    right: 28px;
-    bottom: 28px;
-    font-family: var(--font-head);
-    font-weight: 600;
-    font-size: 1rem;
-    color: #fff;
-    background: rgba(30, 37, 89, 0.82);
+    inset: 0;
+    margin: auto;
+    width: 76px;
+    height: 76px;
+    display: grid;
+    place-items: center;
     border: 0;
-    padding: 11px 22px;
-    border-radius: var(--radius-pill);
-    backdrop-filter: blur(6px);
-    transition: background 0.18s var(--ease);
+    border-radius: 999px;
+    background: rgba(59, 84, 196, 0.92);
+    color: #fff;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.32);
+    transition: transform 0.18s var(--ease), background 0.18s var(--ease);
   }
 
-  .hero-video__sound:hover {
+  .hero__play:hover {
     background: var(--cobalt);
+    transform: scale(1.06);
   }
 
   .hero__float {
@@ -553,36 +561,49 @@ const description =
 </style>
 
 <script>
-  // Hero video: respect data-saver and reduced-motion; start muted autoplay
-  // otherwise, and only show the sound toggle once it is actually playing.
+  // Hero video — a silent brand animation.
+  //
+  // It never autoplays on a phone: it's a 4MB file, and pulling that down
+  // uninvited on mobile data makes a liar of the "loads fast on a phone" line
+  // three paragraphs up. Small screens, reduced motion and data-saver all get
+  // the logo panel and a play button instead.
+  //
+  // On larger screens we try to autoplay, but a refused autoplay is normal and
+  // must not leave an empty box — if play() rejects we fall back to the same
+  // play button rather than swallowing the error.
   const video = document.querySelector<HTMLVideoElement>("[data-hero-video]");
-  const toggle = document.querySelector<HTMLButtonElement>("[data-sound-toggle]");
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const saveData = (navigator as any).connection?.saveData === true;
+  const playBtn = document.querySelector<HTMLButtonElement>("[data-hero-play]");
 
-  if (video) {
-    if (reduce || saveData) {
-      video.setAttribute("controls", "");
-    } else {
-      const play = () => video.play().catch(() => {});
-      if (video.readyState >= 2) play();
-      else video.addEventListener("loadeddata", play, { once: true });
+  if (video && playBtn) {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const saveData = (navigator as any).connection?.saveData === true;
+    const smallScreen = window.matchMedia("(max-width: 767px)").matches;
 
-      video.addEventListener(
-        "playing",
-        () => {
-          if (toggle) toggle.hidden = false;
-        },
-        { once: true }
-      );
-    }
-  }
+    video.muted = true;
 
-  if (video && toggle) {
-    toggle.addEventListener("click", () => {
-      video.muted = !video.muted;
-      if (!video.muted) video.play().catch(() => {});
-      toggle.textContent = video.muted ? "Sound on" : "Sound off";
+    video.addEventListener("playing", () => {
+      playBtn.hidden = true;
     });
+
+    const start = () => {
+      video.preload = "auto";
+      video.play().then(
+        () => {
+          playBtn.hidden = true;
+        },
+        () => {
+          // autoplay refused, or the file isn't there — let them start it
+          playBtn.hidden = false;
+        }
+      );
+    };
+
+    playBtn.addEventListener("click", start);
+
+    if (smallScreen || reduce || saveData) {
+      playBtn.hidden = false;
+    } else {
+      start();
+    }
   }
 </script>
