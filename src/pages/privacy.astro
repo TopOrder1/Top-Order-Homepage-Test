@@ -1,0 +1,87 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { business } from "../data/site";
+
+const updated = "September 2026";
+---
+
+<BaseLayout
+  title="Privacy policy"
+  description="How Top Order Digital collects, uses and looks after your personal information."
+  stickyCta={false}
+>
+  <section class="section">
+    <div class="container prose">
+      <span class="eyebrow">Privacy</span>
+      <h1 style="margin-top:1.25rem">Privacy policy</h1>
+      <p class="prose__updated">Last updated {updated}</p>
+
+      <p>
+        This site is run by {business.owner}, trading as {business.name}
+        (ABN {business.abn}), a sole trader based in {business.suburb}. This
+        policy explains what personal information I collect through
+        {business.domain}, why, and what I do with it. I follow the Australian
+        Privacy Principles in the Privacy Act 1988 (Cth).
+      </p>
+
+      <h2>What I collect</h2>
+      <p>
+        The only information I collect is what you send me through the enquiry
+        form or by email: your name, business name and trade, the suburbs you
+        work in, your phone number if you give it, and whatever you write in
+        your message.
+      </p>
+      <p>
+        The site does not use analytics or advertising cookies. My host
+        (Cloudflare) keeps standard server logs — IP address, browser type,
+        pages requested — for security and to keep the site running. I don't use
+        those logs to identify individuals.
+      </p>
+
+      <h2>How I use it</h2>
+      <ul>
+        <li>To read your enquiry and reply to it.</li>
+        <li>To quote on and, if you go ahead, deliver your website.</li>
+        <li>To keep in touch about work I'm doing for you.</li>
+      </ul>
+      <p>
+        I don't send marketing emails, and I never sell or rent your
+        information.
+      </p>
+
+      <h2>Who it's shared with</h2>
+      <p>
+        Enquiry-form submissions are delivered to my inbox through Web3Forms, a
+        form-handling service. Your message is also stored in my email
+        (Google). If I build your site, I may use hosting, domain and email
+        providers on your behalf — I'll tell you which ones. I only share your
+        information where it's needed to do the work, or where the law requires
+        it.
+      </p>
+
+      <h2>How long I keep it</h2>
+      <p>
+        I keep enquiry emails while there's a reasonable chance we'll work
+        together, and project records for as long as I need them for tax and
+        business records (generally five to seven years). You can ask me to
+        delete your enquiry at any time.
+      </p>
+
+      <h2>Access, correction and complaints</h2>
+      <p>
+        You can ask to see what personal information I hold about you, ask me to
+        correct it, or ask me to delete it. Email
+        <a href={`mailto:${business.email}`}>{business.email}</a> and I'll sort
+        it out. If you're not happy with how I've handled your information, you
+        can contact the Office of the Australian Information Commissioner at
+        <a href="https://www.oaic.gov.au">oaic.gov.au</a>.
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        If this policy changes, the new version goes up on this page with an
+        updated date.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,50 @@
+---
+import { mailto } from "../data/site";
+interface Props {
+  heading: string;
+  body: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+}
+const {
+  heading,
+  body,
+  secondaryLabel = "See the work first",
+  secondaryHref = "/work",
+} = Astro.props;
+---
+
+<section class="section cta-band">
+  <div class="container cta-band__inner" data-reveal>
+    <h2>{heading}</h2>
+    <p class="lead">{body}</p>
+    <div class="cta-band__actions">
+      <a href="/contact" class="btn btn--lg">Send me an enquiry</a>
+      <a href={secondaryHref} class="btn btn--lg btn--secondary">{secondaryLabel}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-band__inner {
+    text-align: center;
+    max-width: 40rem;
+  }
+
+  .cta-band h2 {
+    font-size: clamp(1.9rem, 1.4rem + 2.2vw, 2.75rem);
+  }
+
+  .cta-band .lead {
+    margin: 1.1rem auto 0;
+    max-width: 35rem;
+  }
+
+  .cta-band__actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 2rem;
+  }
+</style>

@@ -1,18 +1,17 @@
-# Superseded / legacy materials — not part of the live site
-Lion's Share Digital Brand Kit.pdf
-Lion's Share Digital Homepage (Standalone).html
-Top Order Digital Brand Kit.pdf
-Screenshot*.png
-final.zip
-legacy-static-site/
+# build output
+dist/
+.output/
 
-# Local tooling — not needed for the deployed site
-.claude/
-scripts/
+# dependencies
+node_modules/
 
-# Raw brand source files (large; not referenced by the deployed site)
-assets/img/brand/
+# generated types
+.astro/
 
-# OS/editor cruft
+# environment
+.env
+.env.production
+
+# macOS / editor
 .DS_Store
-Thumbs.db
+*.log
