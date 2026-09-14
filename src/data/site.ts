@@ -152,12 +152,15 @@ export const projects: Project[] = [
     built: "Two weeks",
   },
   {
-    name: "Northside Electrical",
+    // Demo concept, not a client. Demos must never borrow a real-sounding
+    // business name or a registerable domain — this entry originally named a
+    // real, trading electrician by accident. Keep demo domains under our own.
+    name: "Electrician demo",
     trade: "Electrician",
     tradeShort: "Electrician",
     suburb: "Duncraig",
     year: "2026",
-    domain: "northsideelectrical.com.au",
+    domain: "electrician.toporderdigital.com.au",
     shot: null,
     status: "planned",
     blurb:
