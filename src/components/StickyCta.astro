@@ -1,0 +1,67 @@
+---
+import { mailto } from "../data/site";
+const { label = "Email me about your website" } = Astro.props;
+---
+
+<div class="sticky-cta" data-sticky-cta aria-hidden="true">
+  <a href={mailto("Website enquiry")} class="btn btn--block" tabindex="-1">{label}</a>
+</div>
+
+<style>
+  .sticky-cta {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 35;
+    padding: 12px var(--gutter) calc(12px + env(safe-area-inset-bottom));
+    background: linear-gradient(
+      to top,
+      rgba(247, 245, 242, 0.98) 60%,
+      rgba(247, 245, 242, 0)
+    );
+    transform: translateY(120%);
+    transition: transform 0.28s var(--ease);
+  }
+
+  .sticky-cta[data-visible] {
+    transform: translateY(0);
+  }
+
+  @media (min-width: 861px) {
+    .sticky-cta {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const el = document.querySelector<HTMLElement>("[data-sticky-cta]");
+  const link = el?.querySelector("a");
+  if (el && link) {
+    // reveal after the reader has scrolled past the first screen,
+    // hide again near the footer so it never covers footer actions
+    const footer = document.querySelector("footer");
+    let footerVisible = false;
+
+    if (footer && "IntersectionObserver" in window) {
+      new IntersectionObserver(
+        ([entry]) => {
+          footerVisible = entry.isIntersecting;
+          update();
+        },
+        { rootMargin: "0px 0px -40% 0px" }
+      ).observe(footer);
+    }
+
+    const update = () => {
+      const show = window.scrollY > window.innerHeight * 0.8 && !footerVisible;
+      el.toggleAttribute("data-visible", show);
+      el.setAttribute("aria-hidden", String(!show));
+      link.tabIndex = show ? 0 : -1;
+    };
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+  }
+</script>

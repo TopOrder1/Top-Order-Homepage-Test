@@ -1,0 +1,271 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { business, processSteps, mailto } from "../data/site";
+
+const description =
+  "I'm Simon Heyting — a Duncraig local with years of marketing and client management behind me. I build every Top Order Digital site myself, for small businesses in Perth's northern suburbs.";
+
+const values = [
+  { title: "I answer my own email", body: "Within a day, and it's me, not a form reply." },
+  { title: "Plain English only", body: "If I can't explain why something's worth doing, I won't charge you for it." },
+  { title: "You own the site", body: "The site and the domain, outright. Leave whenever and take the files with you." },
+  { title: "I work where you work", body: "Northern suburbs only. I'd rather know the area than cover the state." },
+];
+---
+
+<BaseLayout title="About" description={description}>
+  <section class="page-intro">
+    <div class="container">
+      <span class="eyebrow" data-reveal>About</span>
+      <div class="page-head" data-reveal>
+        <h1>One person. That's the whole business.</h1>
+        <p class="lead">
+          I'm Simon. I live in Duncraig, I build the sites myself, and you deal
+          with me from the first email to the day it goes live and after.
+          There's no account manager, because there's no account to manage.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section--tight">
+    <div class="container about-grid">
+      <aside class="about-card" data-reveal>
+        <div class="about-card__portrait">
+          {/* Swap this block for <img src="/assets/simon.jpg" alt="Simon Heyting" /> once you have a photo */}
+          <span>A photo of Simon<br />goes here</span>
+        </div>
+        <p class="about-card__name">{business.owner}</p>
+        <p class="muted">{business.suburb} · sole trader</p>
+        <ul class="about-card__contact">
+          <li><a href={mailto("Website enquiry")}>{business.email}</a></li>
+          <li><a href={business.phoneHref}>{business.phone}</a></li>
+          <li><span class="muted">ABN {business.abn}</span></li>
+        </ul>
+        <div class="pill-row about-card__pills">
+          <span class="tag">Duncraig local</span>
+          <span class="tag">Marketing background</span>
+        </div>
+        <a href="/contact" class="btn btn--block">Email me</a>
+      </aside>
+
+      <div class="about-prose" data-reveal>
+        <p class="about-prose__lead">
+          I'm not an agency and I'm not from out of town. I live in Duncraig,
+          and the businesses I build sites for are all local and looking to
+          improve their online presence.
+        </p>
+        <p>
+          Before this I spent years running social media and email marketing
+          campaigns and managing the clients behind them. That's the part that
+          matters here: I know what actually brings enquiries in, what just
+          looks busy, and how to keep someone in the loop without burying them
+          in jargon.
+        </p>
+        <p>
+          I started Top Order Digital because I kept noticing the same thing
+          around here. The sparkie who did our kitchen, the plumber down the
+          road, the crew who clean the solar panels — all good at their trade,
+          all invisible the moment somebody searched for them on a phone.
+          Meanwhile the outfit three suburbs away with a half-decent website was
+          getting the call.
+        </p>
+        <p>
+          Small local businesses are the only ones I want to work with. Not
+          because it's a clever niche, but because I can drive to you, I know
+          who's searching for you around here, and a site that actually works
+          changes how much work comes through the door.
+        </p>
+        <p>
+          So I build the simple version. One clear page, or a handful, that says
+          what you do and where you do it, loads fast on a phone, and puts your
+          number in front of someone who's ready to book. No ongoing
+          contract you can't get out of, no monthly retainer for work nobody can
+          explain, and the price is on the pricing page.
+        </p>
+
+        <ul class="about-values">
+          {
+            values.map((v) => (
+              <li class="card">
+                <h2>{v.title}</h2>
+                <p>{v.body}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="band-dark">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <h2>How a build actually goes</h2>
+          <p>Two weeks, four steps. You're needed for about an hour of it.</p>
+        </div>
+        <ol class="steps" data-reveal>
+          {
+            processSteps.map((s) => (
+              <li class="step">
+                <span class="step__num">{s.num}</span>
+                <h3>{s.title}</h3>
+                <p>{s.body}</p>
+                <span class="step__when">{s.when}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    heading="Tell me about your business"
+    body="Your trade and the suburbs you cover is enough to start. I'll reply within a day with what I'd build and what it costs — no meeting needed first."
+  />
+</BaseLayout>
+
+<style>
+  .about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 48px 72px;
+    align-items: start;
+  }
+
+  .about-card {
+    background: var(--cobalt-tint);
+    border-radius: var(--radius-card);
+    padding: clamp(1.75rem, 1.25rem + 2vw, 2.25rem);
+  }
+
+  @media (min-width: 900px) {
+    .about-card {
+      position: sticky;
+      top: calc(var(--header-h) + 24px);
+    }
+  }
+
+  .about-card__portrait {
+    aspect-ratio: 4 / 5;
+    border-radius: 14px;
+    background: linear-gradient(150deg, #fff0e2, var(--apricot-tint));
+    display: grid;
+    place-items: center;
+    text-align: center;
+    color: var(--ink-faint);
+    font-family: var(--font-head);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .about-card__name {
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .about-card__contact {
+    list-style: none;
+    padding: 0;
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .about-card__pills {
+    margin: 1.6rem 0;
+  }
+
+  .about-card .tag {
+    background: #fff;
+    color: var(--navy);
+  }
+
+  .about-prose__lead {
+    font-size: 1.3125rem;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+
+  .about-prose p + p {
+    margin-top: 1.4rem;
+    color: var(--ink-muted);
+    line-height: 1.75;
+    font-size: 1.125rem;
+  }
+
+  .about-values {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 16px;
+    margin-top: var(--stack);
+  }
+
+  .about-values h2 {
+    font-size: 1.1875rem;
+  }
+
+  .about-values p {
+    margin-top: 0.6rem;
+    color: var(--ink-muted);
+    line-height: 1.65;
+    font-size: 1rem;
+  }
+
+  .steps {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--stack);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 16px;
+    counter-reset: step;
+  }
+
+  .step {
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: var(--radius-card);
+    padding: 26px;
+  }
+
+  .step__num {
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: var(--step-small);
+    letter-spacing: 0.2em;
+    color: var(--apricot);
+  }
+
+  .step h3 {
+    color: #fff;
+    font-size: 1.25rem;
+    margin-top: 0.85rem;
+  }
+
+  .step p {
+    margin-top: 0.6rem;
+    color: var(--on-dark-muted);
+    line-height: 1.65;
+  }
+
+  .step__when {
+    display: block;
+    margin-top: 0.9rem;
+    font-size: var(--step-small);
+    color: var(--on-dark-faint);
+  }
+
+  @media (max-width: 600px) {
+    .about-card .btn {
+      width: 100%;
+    }
+  }
+</style>

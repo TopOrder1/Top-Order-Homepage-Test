@@ -1,0 +1,107 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { business } from "../data/site";
+
+const updated = "September 2026";
+---
+
+<BaseLayout
+  title="Terms"
+  description="The terms that apply to using the Top Order Digital website and engaging Simon to build a website."
+  stickyCta={false}
+>
+  <section class="section">
+    <div class="container prose">
+      <span class="eyebrow">Terms</span>
+      <h1 style="margin-top:1.25rem">Terms</h1>
+      <p class="prose__updated">Last updated {updated}</p>
+
+      <p>
+        {business.name} is {business.owner}, a sole trader (ABN {business.abn})
+        based in {business.suburb}. These terms cover two things: using this
+        website, and what you can expect if you engage me to build one for you.
+      </p>
+
+      <h2>Using this website</h2>
+      <p>
+        The information on {business.domain} — the price range, timeframes and
+        what's included in the package — is provided in good faith and kept
+        current, but it's a starting point, not a fixed quote. Your quote is
+        whatever I confirm to you in writing by email.
+      </p>
+      <p>
+        The site's design, text, code and logo are mine or licensed to me.
+        Please don't copy them for your own use without asking.
+      </p>
+
+      <h2>If I build your website</h2>
+      <ul>
+        <li>
+          <strong>Quote and scope.</strong> I'll email you a plain-English
+          summary of what I'll build and the price before any work starts.
+          That's what we're both agreeing to.
+        </li>
+        <li>
+          <strong>Payment.</strong> A deposit of $250–400 is due before work
+          starts, and the balance of the build price is due when the site goes
+          live. I'll confirm the exact figure in writing first.
+        </li>
+        <li>
+          <strong>What's in the build price.</strong> A custom site of up to
+          five pages, your domain registered for two years, and twelve months of
+          managed hosting from the day the site goes live.
+        </li>
+        <li>
+          <strong>Revisions.</strong> Unlimited revisions before go-live, within
+          the agreed scope. New pages or work beyond that scope are quoted
+          separately and only start once you've agreed to them.
+        </li>
+        <li>
+          <strong>What I need from you.</strong> Your content, photos, logo,
+          ABN and any licence details, and prompt answers to my questions. If
+          these are slow to arrive, the timeframe moves with them.
+        </li>
+        <li>
+          <strong>Timeframe.</strong> Two weeks is typical once I have what I
+          need. I'll tell you early if anything's going to push that out.
+        </li>
+        <li>
+          <strong>Ownership.</strong> When the build is paid for, the website,
+          its files and the domain are yours outright. Nothing sits on a
+          reseller platform, and there is nothing to buy back from me.
+        </li>
+        <li>
+          <strong>Hosting after the first year.</strong> Twelve months after
+          go-live, hosting continues at $49 per month. I'll email you before it
+          starts. You can cancel at any point, and I'll help you move the site
+          and domain to another host if you'd prefer.
+        </li>
+      </ul>
+
+      <h2>Liability</h2>
+      <p>
+        I'll build your site with reasonable care and skill. Nothing in these
+        terms limits rights you have under the Australian Consumer Law. Beyond
+        those rights, I'm not liable for indirect or consequential loss, and my
+        total liability for any claim is limited to the amount you've paid me
+        for the work it relates to.
+      </p>
+      <p>
+        I can't guarantee specific search rankings or enquiry numbers — those
+        depend on your market, your reviews and factors outside my control. What
+        I guarantee is a fast, well-built site set up properly for local search.
+      </p>
+
+      <h2>Governing law</h2>
+      <p>
+        These terms are governed by the law of Western Australia.
+      </p>
+
+      <h2>Questions</h2>
+      <p>
+        Email <a href={`mailto:${business.email}`}>{business.email}</a> and I'll
+        talk you through any of it.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

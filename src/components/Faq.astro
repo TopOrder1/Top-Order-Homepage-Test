@@ -1,0 +1,114 @@
+---
+import { faqs } from "../data/site";
+---
+
+<div class="faq" data-reveal>
+  {
+    faqs.map((item, i) => (
+      <div class="faq__item">
+        <h3 class="faq__q">
+          <button
+            type="button"
+            class="faq__trigger"
+            aria-expanded="false"
+            aria-controls={`faq-panel-${i}`}
+            id={`faq-trigger-${i}`}
+          >
+            <span>{item.q}</span>
+            <span class="faq__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 20 20">
+                <path
+                  d="M10 4v12M4 10h12"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.4"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </span>
+          </button>
+        </h3>
+        <div
+          class="faq__panel"
+          id={`faq-panel-${i}`}
+          role="region"
+          aria-labelledby={`faq-trigger-${i}`}
+          hidden
+        >
+          <p>{item.a}</p>
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .faq {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .faq__item {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+
+  .faq__q {
+    margin: 0;
+  }
+
+  .faq__trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    text-align: left;
+    background: transparent;
+    border: 0;
+    padding: 22px 26px;
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 1.1875rem;
+    line-height: 1.35;
+    color: var(--navy);
+  }
+
+  .faq__icon {
+    flex: none;
+    color: var(--cobalt);
+    transition: transform 0.22s var(--ease);
+  }
+
+  .faq__trigger[aria-expanded="true"] .faq__icon {
+    transform: rotate(45deg);
+  }
+
+  .faq__panel {
+    padding: 0 26px 24px;
+  }
+
+  .faq__panel[hidden] {
+    display: none;
+  }
+
+  .faq__panel p {
+    margin: 0;
+    color: var(--ink-muted);
+    line-height: 1.7;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>(".faq__trigger").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const panel = document.getElementById(btn.getAttribute("aria-controls")!);
+      const open = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", String(!open));
+      if (panel) panel.hidden = open;
+    });
+  });
+</script>

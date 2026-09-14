@@ -1,0 +1,22 @@
+{
+  "name": "top-order-digital",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Top Order Digital — websites for local trades and services in Perth's northern suburbs.",
+  "scripts": {
+    "predev": "node scripts/generate-og.mjs",
+    "dev": "astro dev",
+    "prebuild": "node scripts/generate-og.mjs",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "//": "Versions are pinned exactly, not with carets. There is no lockfile committed, so a caret lets the CI build resolve a newer major of a dependency than the one this was written against — which is exactly how the sitemap integration broke the first build.",
+  "dependencies": {
+    "astro": "4.16.19"
+  },
+  "devDependencies": {
+    "sharp": "0.33.5"
+  }
+}

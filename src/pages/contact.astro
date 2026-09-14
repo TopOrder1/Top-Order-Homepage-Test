@@ -1,0 +1,353 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { business, suburbs, mailto } from "../data/site";
+
+const description =
+  "Email Simon at Top Order Digital. Your trade and the suburbs you cover is enough to start — reply within a day with what it would take and what it costs.";
+
+const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? "";
+const directMailto = mailto(
+  "Website enquiry",
+  "Hi Simon,\n\nMy trade: \nSuburbs I cover: \nWhat I need the site to do: \n"
+);
+---
+
+<BaseLayout
+  title="Contact"
+  description={description}
+  stickyCta={false}
+>
+  <section class="section--tight contact-hero">
+    <div class="container">
+      <span class="eyebrow" data-reveal>Enquiries</span>
+      <h1 data-reveal>Tell me what you need.</h1>
+      <p class="lead" data-reveal>
+        Your trade and your suburbs is enough to start. I reply within a day
+        with what I'd build and what it costs.
+      </p>
+    </div>
+  </section>
+
+  <section class="section--tight">
+    <div class="container contact-layout">
+      <form
+        class="contact-form card"
+        data-contact-form
+        data-key={web3formsKey}
+        data-email={business.email}
+        action={web3formsKey ? "https://api.web3forms.com/submit" : undefined}
+        method="POST"
+        data-reveal
+      >
+        <input type="hidden" name="access_key" value={web3formsKey} />
+        <input type="hidden" name="subject" value="New website enquiry — Top Order Digital" />
+        <input type="hidden" name="from_name" value="Top Order Digital website" />
+        <!-- honeypot -->
+        <input type="checkbox" name="botcheck" class="visually-hidden" tabindex="-1" autocomplete="off" />
+
+        <div class="field">
+          <label for="name">Your name</label>
+          <input type="text" id="name" name="name" autocomplete="name" placeholder="Dave Wilson" required />
+        </div>
+
+        <div class="field">
+          <label for="business">Business and trade</label>
+          <input
+            type="text"
+            id="business"
+            name="business"
+            autocomplete="organization"
+            placeholder="Wilson Electrical — electrician"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="suburbs">Suburbs you cover</label>
+          <input
+            type="text"
+            id="suburbs"
+            name="suburbs"
+            list="suburb-list"
+            placeholder="Duncraig, Carine, Sorrento"
+          />
+          <datalist id="suburb-list">
+            {suburbs.map((s) => <option value={s} />)}
+          </datalist>
+        </div>
+
+        <div class="field">
+          <label for="phone">Phone <span class="field__opt">(optional)</span></label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            autocomplete="tel"
+            inputmode="tel"
+            placeholder="0400 000 000"
+          />
+        </div>
+
+        <div class="field">
+          <label for="message">What do you need the site to do?</label>
+          <textarea
+            id="message"
+            name="message"
+            rows="5"
+            placeholder="Got no website at all. Mostly after more air-con install work through winter."
+            required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn--lg btn--block" data-submit>
+          Send enquiry
+        </button>
+
+        <p class="contact-form__status" data-status role="status" aria-live="polite"></p>
+
+        <p class="fineprint contact-form__fallback">
+          Prefer to use your own email? Write to me at
+          <a href={directMailto}>{business.email}</a>.
+        </p>
+      </form>
+
+      <aside class="contact-aside" data-reveal>
+        <h2>What happens next</h2>
+        <ol class="contact-aside__steps">
+          <li>I read it myself — usually the same day.</li>
+          <li>You get a reply within a day with what I'd build and the price.</li>
+          <li>If it's a fit, we book one short phone call and I start.</li>
+        </ol>
+        <div class="contact-aside__direct">
+          <p class="fineprint">Or reach me directly</p>
+          <a href={mailto("Website enquiry")} class="contact-aside__line">{business.email}</a>
+          <a href={business.phoneHref} class="contact-aside__line">{business.phone}</a>
+          <p class="fineprint">{business.suburb} · ABN {business.abn}</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-hero {
+    text-align: center;
+  }
+
+  .contact-hero h1 {
+    font-size: clamp(2.125rem, 1.6rem + 2.6vw, 3.375rem);
+    margin-top: 1.5rem;
+    max-width: 18ch;
+    margin-inline: auto;
+  }
+
+  .contact-hero .lead {
+    max-width: 34rem;
+    margin: 1.2rem auto 0;
+  }
+
+  .contact-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 32px 56px;
+    align-items: start;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .field label {
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 1.0625rem;
+    color: var(--navy);
+  }
+
+  .field__opt {
+    font-family: var(--font-body);
+    font-weight: 400;
+    color: var(--ink-faint);
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 1.0625rem; /* >=16px stops iOS zoom-on-focus */
+    color: var(--ink);
+    background: var(--warm-white);
+    border: 2px solid var(--cobalt-tint);
+    border-radius: var(--radius-input);
+    padding: 15px 16px;
+    transition: border-color 0.16s var(--ease), box-shadow 0.16s var(--ease);
+  }
+
+  .contact-form textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.6;
+  }
+
+  .contact-form input::placeholder,
+  .contact-form textarea::placeholder {
+    color: var(--ink-faint);
+  }
+
+  .contact-form input:focus,
+  .contact-form textarea:focus {
+    outline: none;
+    border-color: var(--cobalt);
+    box-shadow: 0 0 0 4px rgba(59, 84, 196, 0.14);
+  }
+
+  .contact-form input:user-invalid,
+  .contact-form textarea:user-invalid {
+    border-color: #c2412d;
+  }
+
+  .contact-form__status {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .contact-form__status[data-state="success"] {
+    color: #1f7a4d;
+    font-weight: 500;
+  }
+
+  .contact-form__status[data-state="error"] {
+    color: #c2412d;
+  }
+
+  .contact-form__fallback {
+    text-align: center;
+    margin: 0;
+  }
+
+  .contact-aside {
+    background: var(--cobalt-tint);
+    border-radius: var(--radius-card);
+    padding: clamp(1.5rem, 1rem + 2vw, 2rem);
+  }
+
+  .contact-aside h2 {
+    font-size: 1.375rem;
+  }
+
+  .contact-aside__steps {
+    margin: 1.1rem 0 0;
+    padding-left: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--ink-muted);
+    line-height: 1.6;
+  }
+
+  .contact-aside__direct {
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(30, 37, 89, 0.14);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .contact-aside__line {
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 1.0625rem;
+  }
+
+  @media (max-width: 820px) {
+    .contact-layout {
+      grid-template-columns: 1fr;
+    }
+    .contact-aside {
+      order: -1;
+    }
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("[data-contact-form]");
+  const status = form?.querySelector<HTMLElement>("[data-status]");
+  const submit = form?.querySelector<HTMLButtonElement>("[data-submit]");
+  const key = form?.dataset.key;
+  const address = form?.dataset.email ?? "";
+
+  const buildMailto = (data: FormData) => {
+    const body = [
+      `Name: ${data.get("name") || ""}`,
+      `Business: ${data.get("business") || ""}`,
+      `Suburbs: ${data.get("suburbs") || ""}`,
+      `Phone: ${data.get("phone") || ""}`,
+      "",
+      `What I need:`,
+      `${data.get("message") || ""}`,
+    ].join("\n");
+    return `mailto:${address}?subject=${encodeURIComponent(
+      "Website enquiry"
+    )}&body=${encodeURIComponent(body)}`;
+  };
+
+  form?.addEventListener("submit", async (e) => {
+    if (!form.reportValidity()) return;
+    e.preventDefault();
+
+    const data = new FormData(form);
+
+    // No key configured yet → fall back to opening the user's email client.
+    if (!key) {
+      window.location.href = buildMailto(data);
+      return;
+    }
+
+    submit?.setAttribute("disabled", "");
+    if (status) {
+      status.textContent = "Sending…";
+      status.dataset.state = "pending";
+    }
+
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: data,
+      });
+      const json = await res.json();
+
+      if (res.ok && json.success) {
+        form.reset();
+        if (status) {
+          status.textContent =
+            "Thanks — that's with me. I'll reply within a day, usually sooner.";
+          status.dataset.state = "success";
+        }
+        submit?.setAttribute("hidden", "");
+      } else {
+        throw new Error(json.message || "Request failed");
+      }
+    } catch {
+      if (status) {
+        status.textContent =
+          "Something went wrong sending that. Please email me directly at ";
+        const link = document.createElement("a");
+        link.href = `mailto:${address}`;
+        link.textContent = address;
+        status.append(link, ".");
+        status.dataset.state = "error";
+      }
+      submit?.removeAttribute("disabled");
+    }
+  });
+</script>

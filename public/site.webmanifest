@@ -1,0 +1,13 @@
+{
+  "name": "Top Order Digital",
+  "short_name": "Top Order",
+  "description": "Websites for local trades and services in Perth's northern suburbs.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#F7F5F2",
+  "theme_color": "#3B54C4",
+  "icons": [
+    { "src": "/favicon.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

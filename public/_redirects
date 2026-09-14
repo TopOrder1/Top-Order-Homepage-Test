@@ -1,0 +1,15 @@
+# Cloudflare Pages redirects.
+#
+# The site this replaced was a single page at "/", so there are no old URLs to
+# rescue — "/" still exists. These are common guesses people and old links try.
+# Format: /source  /destination  status
+
+/home                                    /           301
+/services                                /pricing    301
+/packages                                /pricing    301
+/prices                                  /pricing    301
+/portfolio                               /work       301
+/projects                                /work       301
+/about-us                                /about      301
+/contact-us                              /contact    301
+/get-a-quote                             /contact    301

@@ -1,0 +1,30 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { nav } from "../data/site";
+---
+
+<BaseLayout
+  title="Page not found"
+  description="That page isn't here. Head back to the homepage or send an enquiry."
+  stickyCta={false}
+>
+  <section class="section" style="text-align:center">
+    <div class="container">
+      <span class="eyebrow">404</span>
+      <h1 style="margin-top:1.25rem;font-size:var(--step-h1)">
+        That page isn't here.
+      </h1>
+      <p class="lead" style="max-width:34rem;margin:1.2rem auto 0">
+        It may have moved, or the link was wrong. Here's the way back.
+      </p>
+      <div
+        style="display:flex;justify-content:center;flex-wrap:wrap;gap:14px;margin-top:2rem"
+      >
+        <a href="/" class="btn btn--lg">Back to home</a>
+        {nav.map((item) => (
+          <a href={item.href} class="btn btn--lg btn--secondary">{item.label}</a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

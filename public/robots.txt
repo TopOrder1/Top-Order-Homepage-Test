@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /assets/img/brand/
 
 Sitemap: https://toporderdigital.com.au/sitemap.xml

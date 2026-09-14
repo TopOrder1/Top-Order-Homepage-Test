@@ -1,0 +1,152 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PricingPanel from "../components/PricingPanel.astro";
+import Faq from "../components/Faq.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { paymentSteps, mailto } from "../data/site";
+
+const description =
+  "One package — The Openers, $500–800 for a full custom five-page site, with the domain and first year of hosting included. Real price on the page, no quote form.";
+---
+
+<BaseLayout title="Pricing" description={description}>
+  <section class="page-intro">
+    <div class="container">
+      <span class="eyebrow" data-reveal>Pricing</span>
+      <div class="page-head" data-reveal>
+        <h1>The price is on the page.</h1>
+        <p class="lead">
+          One package, one number. No quote form to fill in before you know what
+          it costs, and no discovery call you have to sit through first. Read
+          what's in it, email me, and I'll tell you straight if it isn't the
+          right fit.
+        </p>
+      </div>
+
+      <div class="page-intro__body">
+        <PricingPanel />
+      </div>
+      <p class="fineprint" style="margin-top:1.5rem">
+        If your job doesn't fit inside five pages,
+        <a href={mailto("Website enquiry")}>email me</a> and I'll tell you what
+        it would take.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="band-dark">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <h2>How paying works</h2>
+          <p>Two payments to get the site built, then hosting once the first year is up.</p>
+        </div>
+
+        <ol class="pay-steps" data-reveal>
+          {
+            paymentSteps.map((s) => (
+              <li class="pay-step">
+                <span class="pay-step__when">{s.when}</span>
+                <p class="pay-step__amount">{s.amount}</p>
+                <p class="pay-step__body">{s.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+
+        <p class="pay-note" data-reveal>
+          Nothing renews without me telling you first, and the site and domain
+          are yours either way.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section faq-section">
+    <div class="container faq-section__grid">
+      <div data-reveal>
+        <h2>Questions I get asked</h2>
+        <p class="lead" style="margin-top:0.85rem">
+          If yours isn't here, email me. I answer these myself.
+        </p>
+        <a href={mailto("Website question")} class="btn btn--lg faq-section__cta">
+          Ask me something
+        </a>
+      </div>
+      <Faq />
+    </div>
+  </section>
+
+  <CtaBand
+    heading="Sound about right?"
+    body="Email me your trade and the suburbs you cover. I'll reply within a day with which end of the range you're at and what happens next."
+  />
+</BaseLayout>
+
+<style>
+  .pay-steps {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--stack);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 16px;
+  }
+
+  .pay-step {
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: var(--radius-card);
+    padding: 26px;
+  }
+
+  .pay-step__when {
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: var(--step-small);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--apricot);
+  }
+
+  .pay-step__amount {
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 1.75rem;
+    letter-spacing: -0.01em;
+    color: #fff;
+    margin-top: 0.7rem;
+  }
+
+  .pay-step__body {
+    margin-top: 0.6rem;
+    color: var(--on-dark-muted);
+    line-height: 1.65;
+  }
+
+  .pay-note {
+    margin-top: 1.25rem;
+    font-size: var(--step-small);
+    color: var(--on-dark-muted);
+  }
+
+  .faq-section__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 32px 72px;
+    align-items: start;
+  }
+
+  .faq-section h2 {
+    font-size: var(--step-h2);
+  }
+
+  .faq-section__cta {
+    margin-top: 1.75rem;
+  }
+
+  @media (max-width: 600px) {
+    .faq-section__cta {
+      width: 100%;
+    }
+  }
+</style>

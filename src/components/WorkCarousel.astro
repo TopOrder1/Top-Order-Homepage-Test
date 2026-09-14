@@ -1,0 +1,462 @@
+---
+import { projects } from "../data/site";
+---
+
+<div class="deck" data-deck>
+  <div class="deck__viewport" data-deck-viewport>
+    <ul class="deck__track" data-deck-track>
+      {
+        projects.map((p, i) => (
+          <li class="deck__card" data-card data-index={i}>
+            <a
+              class="deck__link"
+              href="/work"
+              aria-label={`${p.name} — ${p.tradeShort} in ${p.suburb}. See the portfolio.`}
+            >
+              <div class:list={["deck__shot", { "deck__shot--empty": p.status !== "live" }]}>
+                <span class="deck__dots" aria-hidden="true"><span /><span /><span /></span>
+                {p.status === "live" && p.shot ? (
+                  <img src={p.shot} alt={`${p.name} website`} loading="lazy" decoding="async" draggable="false" />
+                ) : (
+                  <span class="deck__pending">Demo build in progress</span>
+                )}
+              </div>
+              <div class="deck__caption">
+                <span class="tag">{p.tradeShort}</span>
+                <h3>{p.name}</h3>
+                <p>{p.suburb} — {p.blurb.split(". ")[0]}.</p>
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="deck__controls">
+    <button type="button" class="deck__arrow" data-deck-prev aria-label="Previous project">
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6.5 10l6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="deck__dots-nav" role="tablist" aria-label="Choose project" data-deck-dots>
+      {
+        projects.map((p, i) => (
+          <button
+            type="button"
+            role="tab"
+            class="deck__dot"
+            data-deck-dot={i}
+            aria-label={`Show ${p.name}`}
+            aria-selected={i === 0 ? "true" : "false"}
+          />
+        ))
+      }
+    </div>
+    <button type="button" class="deck__arrow" data-deck-next aria-label="Next project">
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
+  <p class="visually-hidden" aria-live="polite" data-deck-status></p>
+</div>
+
+<style>
+  .deck {
+    margin-top: var(--stack);
+    --card-w: clamp(258px, 74vw, 384px);
+    --card-h: calc(var(--card-w) * 1.32);
+    --deck-step: 56px;
+  }
+
+  @media (max-width: 560px) {
+    .deck {
+      --deck-step: 32px;
+    }
+  }
+
+  /* no-JS / base: a plain horizontal scroller */
+  .deck__viewport {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .deck__track {
+    list-style: none;
+    margin: 0;
+    padding: 4px 2px 12px;
+    display: flex;
+    gap: 20px;
+  }
+
+  .deck__card {
+    flex: 0 0 var(--card-w);
+    scroll-snap-align: center;
+  }
+
+  /* JS-enhanced: fanned deck */
+  .deck--ready .deck__viewport {
+    overflow: visible;
+    height: calc(var(--card-h) + 56px);
+    perspective: 1400px;
+    touch-action: pan-y;
+    cursor: grab;
+  }
+
+  .deck--ready.is-dragging .deck__viewport {
+    cursor: grabbing;
+  }
+
+  .deck--ready .deck__track {
+    position: relative;
+    height: 100%;
+    padding: 0;
+    display: block;
+  }
+
+  .deck--ready .deck__card {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    width: var(--card-w);
+    margin-left: calc(var(--card-w) / -2);
+    transform-origin: bottom center;
+    transition: transform 0.55s var(--ease), opacity 0.45s var(--ease);
+    will-change: transform, opacity;
+  }
+
+  .deck--ready.is-dragging .deck__card {
+    transition: none;
+  }
+
+  .deck__link {
+    display: block;
+    background: var(--white);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: 14px;
+    color: inherit;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .deck--ready .deck__card[data-active] .deck__link {
+    box-shadow: 0 28px 56px -14px rgba(30, 37, 89, 0.32);
+  }
+
+  .deck__link:hover {
+    color: inherit;
+  }
+
+  .deck--ready .deck__card[data-active] .deck__link:hover {
+    transform: translateY(-4px);
+    transition: transform 0.2s var(--ease);
+  }
+
+  .deck__shot {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--cobalt-tint);
+    aspect-ratio: 4 / 3;
+    display: flex;
+  }
+
+  .deck__shot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  .deck__shot--empty {
+    align-items: center;
+    justify-content: center;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--cobalt-tint),
+      var(--cobalt-tint) 14px,
+      #eef1fb 14px,
+      #eef1fb 28px
+    );
+  }
+
+  .deck__dots {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    display: flex;
+    gap: 6px;
+    z-index: 1;
+  }
+
+  .deck__dots span {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.75);
+  }
+
+  .deck__shot--empty .deck__dots span {
+    background: #c9cee4;
+  }
+
+  .deck__pending {
+    font-family: var(--font-head);
+    font-weight: 600;
+    color: var(--ink-faint);
+  }
+
+  .deck__caption {
+    padding: 1.1rem 0.4rem 0.3rem;
+  }
+
+  .deck__caption h3 {
+    font-size: 1.375rem;
+    margin-top: 0.7rem;
+  }
+
+  .deck__caption p {
+    margin-top: 0.4rem;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--ink-muted);
+    /* keep every card the same height so the fan reads evenly */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: calc(3 * 1.55em);
+  }
+
+  .deck__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 1.5rem;
+  }
+
+  .deck__arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    border: 2px solid var(--cobalt);
+    background: var(--white);
+    color: var(--cobalt);
+    transition: background 0.18s var(--ease), color 0.18s var(--ease), opacity 0.18s var(--ease);
+  }
+
+  .deck__arrow:hover {
+    background: var(--cobalt);
+    color: #fff;
+  }
+
+  .deck__arrow[disabled] {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  .deck__dots-nav {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .deck__dot {
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: var(--cobalt-tint);
+    transition: width 0.22s var(--ease), background 0.22s var(--ease);
+  }
+
+  .deck__dot[aria-selected="true"] {
+    width: 26px;
+    background: var(--cobalt);
+  }
+
+  /* the plain scroller doesn't need the dots/arrows */
+  .deck:not(.deck--ready) .deck__controls {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .deck--ready .deck__card {
+      transition: opacity 0.2s linear;
+    }
+  }
+</style>
+
+<script>
+  type Deck = HTMLElement;
+
+  function initDeck(deck: Deck) {
+    const viewport = deck.querySelector<HTMLElement>("[data-deck-viewport]");
+    const cards = Array.from(deck.querySelectorAll<HTMLElement>("[data-card]"));
+    const dots = Array.from(deck.querySelectorAll<HTMLButtonElement>("[data-deck-dot]"));
+    // controls are optional — a missing one must not stop the deck laying out
+    const prev = deck.querySelector<HTMLButtonElement>("[data-deck-prev]");
+    const next = deck.querySelector<HTMLButtonElement>("[data-deck-next]");
+    const status = deck.querySelector<HTMLElement>("[data-deck-status]");
+    if (!viewport || cards.length < 2) return;
+
+    const names = cards.map(
+      (c) => c.querySelector("h3")?.textContent?.trim() || ""
+    );
+
+    let active = 0;
+    let dragX = 0;
+    let startX = 0;
+    let dragging = false;
+    let moved = false;
+    let suppressClick = false;
+
+    deck.classList.add("deck--ready");
+
+    const clamp = (n: number) => Math.max(0, Math.min(cards.length - 1, n));
+    const step = () =>
+      parseFloat(getComputedStyle(deck).getPropertyValue("--deck-step")) || 56;
+
+    function render() {
+      const s = step();
+      cards.forEach((card, i) => {
+        const pos = i - active;
+        const ap = Math.abs(pos);
+        const sign = Math.sign(pos);
+        const isActive = pos === 0;
+
+        card.toggleAttribute("data-active", isActive);
+        card.setAttribute("aria-hidden", String(!isActive));
+        const link = card.querySelector<HTMLElement>(".deck__link");
+        if (link) link.setAttribute("tabindex", isActive ? "0" : "-1");
+
+        if (ap > 3) {
+          card.style.opacity = "0";
+          card.style.transform = `translateX(${sign * 340}px) scale(0.6)`;
+          card.style.pointerEvents = "none";
+          return;
+        }
+
+        const x = pos * s + (isActive ? dragX : dragX * 0.22);
+        const rot = pos * 4 + (isActive ? dragX * 0.02 : 0);
+        const scale = 1 - ap * 0.08;
+        const opacity = ap === 0 ? 1 : ap === 1 ? 0.72 : 0.42;
+
+        card.style.transform = `translateX(${x}px) rotate(${rot}deg) scale(${scale})`;
+        card.style.opacity = String(opacity);
+        card.style.zIndex = String(100 - ap);
+        card.style.pointerEvents = isActive ? "auto" : "none";
+      });
+
+      dots.forEach((d, i) =>
+        d.setAttribute("aria-selected", String(i === active))
+      );
+      if (prev) prev.disabled = active === 0;
+      if (next) next.disabled = active === cards.length - 1;
+      if (status) {
+        status.textContent = `Project ${active + 1} of ${cards.length}: ${names[active]}`;
+      }
+    }
+
+    // The cards are absolutely positioned, so the viewport needs an explicit
+    // height. Measure the tallest card instead of guessing a ratio — on narrow
+    // screens the text wraps further and a guessed height pushes the cards
+    // down over the arrows and dots.
+    function fit() {
+      let h = 0;
+      cards.forEach((c) => {
+        h = Math.max(h, c.offsetHeight);
+      });
+      if (h) viewport.style.height = `${h + 40}px`;
+    }
+
+    function go(to: number, keepFocus = false) {
+      const wasFocusedLink =
+        document.activeElement?.classList.contains("deck__link");
+      active = clamp(to);
+      dragX = 0;
+      render();
+      if (keepFocus || wasFocusedLink) {
+        cards[active].querySelector<HTMLElement>(".deck__link")?.focus();
+      }
+    }
+
+    prev?.addEventListener("click", () => go(active - 1));
+    next?.addEventListener("click", () => go(active + 1));
+    dots.forEach((d, i) => d.addEventListener("click", () => go(i)));
+
+    deck.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") { e.preventDefault(); go(active - 1, true); }
+      else if (e.key === "ArrowRight") { e.preventDefault(); go(active + 1, true); }
+    });
+
+    // pointer drag
+    const onDown = (e: PointerEvent) => {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      dragging = true;
+      moved = false;
+      startX = e.clientX;
+      deck.classList.add("is-dragging");
+      try {
+        viewport.setPointerCapture(e.pointerId);
+      } catch {}
+    };
+    const onMove = (e: PointerEvent) => {
+      if (!dragging) return;
+      dragX = e.clientX - startX;
+      if (Math.abs(dragX) > 6) moved = true;
+      render();
+    };
+    const onUp = () => {
+      if (!dragging) return;
+      dragging = false;
+      deck.classList.remove("is-dragging");
+      const threshold = 56;
+      if (dragX <= -threshold) go(active + 1);
+      else if (dragX >= threshold) go(active - 1);
+      else { dragX = 0; render(); }
+      if (moved) {
+        suppressClick = true;
+        setTimeout(() => (suppressClick = false), 0);
+      }
+    };
+
+    viewport.addEventListener("pointerdown", onDown);
+    viewport.addEventListener("pointermove", onMove);
+    viewport.addEventListener("pointerup", onUp);
+    viewport.addEventListener("pointercancel", onUp);
+
+    // a drag that ended on a card shouldn't also open the link
+    deck.querySelectorAll(".deck__link").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        if (suppressClick) e.preventDefault();
+      });
+    });
+
+    let resizeRaf = 0;
+    window.addEventListener("resize", () => {
+      cancelAnimationFrame(resizeRaf);
+      resizeRaf = requestAnimationFrame(() => {
+        render();
+        fit();
+      });
+    });
+
+    // re-measure when a card changes size — webfont load, width change, or the
+    // deck becoming visible after being laid out while hidden
+    if ("ResizeObserver" in window) {
+      const ro = new ResizeObserver(() => fit());
+      cards.forEach((c) => ro.observe(c));
+    }
+
+    render();
+    fit();
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-deck]").forEach(initDeck);
+</script>

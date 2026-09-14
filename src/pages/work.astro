@@ -1,0 +1,416 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { projects, alwaysIncluded, mailto } from "../data/site";
+
+const description =
+  "Demo builds for local trades — electricians, plumbers, landscapers, roofers — across Perth's northern suburbs. Every one fast on a phone with the enquiry button impossible to miss.";
+const trades = ["All work", ...new Set(projects.map((p) => p.tradeShort))];
+---
+
+<BaseLayout title="Work" description={description}>
+  <section class="page-intro">
+    <div class="container">
+      <span class="eyebrow" data-reveal>Selected work</span>
+      <div class="page-head" data-reveal>
+        <h1>Sites built for local trades.</h1>
+        <p class="lead">
+          Every one does the same three things: turns up when someone searches
+          the suburb, loads fast on a phone, and makes the enquiry impossible to
+          miss. Have a look, then email me about yours.
+        </p>
+      </div>
+
+      <div class="page-intro__body work-filter" data-reveal>
+        <p class="work-filter__count">
+          Showing <span data-shown-count>{projects.length}</span> of {projects.length}
+        </p>
+        <div class="work-filter__buttons" role="group" aria-label="Filter work by trade">
+          {
+            trades.map((t, i) => (
+              <button
+                type="button"
+                class="chip"
+                data-filter={t}
+                aria-pressed={i === 0 ? "true" : "false"}
+              >
+                {t}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section--tight">
+    <div class="container work-list">
+      {
+        projects.map((p, i) => (
+          <article class="work-item" data-trade={p.tradeShort} data-reveal>
+            <div class="work-item__meta">
+              <span class="work-item__num">{String(i + 1).padStart(2, "0")}</span>
+              <span class="tag">{p.tradeShort}</span>
+              <span class="muted">{p.suburb}</span>
+              <span class="fineprint">{p.year}</span>
+            </div>
+
+            <div class="work-item__body">
+              <div class="browser-frame">
+                <div class="browser-frame__bar">
+                  <span aria-hidden="true"><span /><span /><span /></span>
+                  <span class="browser-frame__url">{p.domain}</span>
+                </div>
+                <div class:list={["browser-frame__viewport", { "browser-frame__viewport--empty": p.status !== "live" }]}>
+                  {p.status === "live" && p.shot ? (
+                    <img src={p.shot} alt={`${p.name} website`} loading="lazy" decoding="async" />
+                  ) : (
+                    <div class="browser-frame__pending">
+                      <strong>Demo build in progress</strong>
+                      <span>A full {p.tradeShort.toLowerCase()} example is on the way.</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div class="work-item__detail">
+                <div>
+                  <h2>{p.name}</h2>
+                  <p class="muted">{p.blurb}</p>
+                  <div class="pill-row work-item__tags">
+                    {p.tags.map((t) => <span class="tag tag--cobalt">{t}</span>)}
+                  </div>
+                </div>
+                <dl class="work-item__stats">
+                  <div><dt>Pages built</dt><dd>{p.pages}</dd></div>
+                  <div><dt>Time to live</dt><dd>{p.built}</dd></div>
+                </dl>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+      <p class="work-list__empty" data-empty hidden>
+        No demo for that trade yet — <a href={mailto("Website enquiry")}>email me</a> and it might be yours.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="band-dark">
+      <div class="container always-grid">
+        <div data-reveal>
+          <h2>In every site I build</h2>
+          <p class="lead" style="color:var(--on-dark-muted)">
+            Not extras I charge for. They're the reason the site brings you work.
+          </p>
+          <a href="/contact" class="btn btn--lg always-grid__cta">Email me about your site</a>
+        </div>
+        <ul class="always-grid__cards" data-reveal>
+          {
+            alwaysIncluded.map((f) => (
+              <li>
+                <h3>{f.title}</h3>
+                <p>{f.body}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    heading="Want yours on this page?"
+    body="Tell me your trade and the suburbs you cover. I'll reply within a day with what I'd build and what it costs — no meeting needed first."
+    secondaryLabel="See pricing"
+    secondaryHref="/pricing"
+  />
+</BaseLayout>
+
+<style>
+  .work-filter {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .work-filter__count {
+    font-size: var(--step-small);
+    color: var(--ink-faint);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .work-filter__buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-left: auto;
+  }
+
+  .chip {
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 10px 20px;
+    min-height: 44px;
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--cobalt);
+    background: transparent;
+    color: var(--cobalt);
+    transition: background 0.18s var(--ease), color 0.18s var(--ease);
+  }
+
+  .chip[aria-pressed="true"] {
+    background: var(--cobalt);
+    color: #fff;
+  }
+
+  .work-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .work-item {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 28px 48px;
+    padding-block: 48px;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .work-item__meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .work-item__num {
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: var(--step-small);
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+  }
+
+  @media (min-width: 900px) {
+    .work-item__meta {
+      position: sticky;
+      top: calc(var(--header-h) + 24px);
+      align-self: start;
+    }
+  }
+
+  .browser-frame {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: 14px;
+    transition: transform 0.24s var(--ease), box-shadow 0.24s var(--ease);
+  }
+
+  .browser-frame:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lift);
+  }
+
+  .browser-frame__bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 6px 12px;
+  }
+
+  .browser-frame__bar > span:first-child {
+    display: flex;
+    gap: 6px;
+  }
+
+  .browser-frame__bar > span:first-child span {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: #c9cee4;
+  }
+
+  .browser-frame__url {
+    font-size: var(--step-small);
+    color: var(--ink-faint);
+  }
+
+  .browser-frame__viewport {
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--cobalt-tint);
+    aspect-ratio: 16 / 10;
+  }
+
+  .browser-frame__viewport img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  .browser-frame__viewport--empty {
+    display: grid;
+    place-items: center;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--cobalt-tint),
+      var(--cobalt-tint) 14px,
+      #eef1fb 14px,
+      #eef1fb 28px
+    );
+  }
+
+  .browser-frame__pending {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .browser-frame__pending strong {
+    font-family: var(--font-head);
+    color: var(--navy);
+  }
+
+  .browser-frame__pending span {
+    font-size: var(--step-small);
+    color: var(--ink-faint);
+  }
+
+  .work-item__detail {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 28px 48px;
+    margin-top: 28px;
+  }
+
+  .work-item__detail h2 {
+    font-size: 1.75rem;
+  }
+
+  .work-item__detail .muted {
+    margin-top: 0.8rem;
+    line-height: 1.7;
+  }
+
+  .work-item__tags {
+    margin-top: 1.2rem;
+  }
+
+  .work-item__stats {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0;
+  }
+
+  .work-item__stats dt {
+    font-size: var(--step-small);
+    color: var(--ink-faint);
+  }
+
+  .work-item__stats dd {
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 1.125rem;
+    color: var(--navy);
+    margin: 2px 0 0;
+  }
+
+  .work-list__empty {
+    padding: 48px 0;
+    text-align: center;
+    color: var(--ink-muted);
+  }
+
+  .always-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: 48px 72px;
+    align-items: center;
+  }
+
+  .always-grid__cta {
+    margin-top: 1.9rem;
+  }
+
+  .always-grid__cards {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 16px;
+  }
+
+  .always-grid__cards li {
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: var(--radius-card);
+    padding: 24px;
+  }
+
+  .always-grid__cards h3 {
+    font-size: 1.1875rem;
+    color: #fff;
+  }
+
+  .always-grid__cards p {
+    margin-top: 0.6rem;
+    color: var(--on-dark-muted);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 899px) {
+    .work-item {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .work-item__meta {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .work-filter__buttons {
+      margin-left: 0;
+    }
+    .always-grid__cta {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>("[data-filter]");
+  const items = document.querySelectorAll<HTMLElement>(".work-item");
+  const count = document.querySelector<HTMLElement>("[data-shown-count]");
+  const empty = document.querySelector<HTMLElement>("[data-empty]");
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const filter = btn.dataset.filter;
+      buttons.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+
+      let shown = 0;
+      items.forEach((item) => {
+        const match = filter === "All work" || item.dataset.trade === filter;
+        item.hidden = !match;
+        if (match) shown++;
+      });
+
+      if (count) count.textContent = String(shown);
+      if (empty) empty.hidden = shown > 0;
+    });
+  });
+</script>

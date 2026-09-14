@@ -1,0 +1,18 @@
+{
+  // Cloudflare Worker serving the built site as static assets.
+  //
+  // IMPORTANT: "name" must match the existing Worker's name exactly, or
+  // `wrangler deploy` creates a brand new Worker and the custom domain keeps
+  // pointing at the old one. Check it at the top of the Worker's dashboard page.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "top-order-homepage-test",
+  "compatibility_date": "2026-09-13",
+
+  // No "main" script — this is a static site, so Cloudflare just serves the
+  // files Astro writes into dist/.
+  "assets": {
+    "directory": "./dist",
+    // serve dist/404.html for unknown paths instead of a bare Cloudflare error
+    "not_found_handling": "404-page"
+  }
+}

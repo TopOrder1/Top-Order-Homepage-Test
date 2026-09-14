@@ -1,0 +1,609 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PricingPanel from "../components/PricingPanel.astro";
+import WorkCarousel from "../components/WorkCarousel.astro";
+import { business, heroTags, mailto } from "../data/site";
+
+const description =
+  "I build straightforward websites for local trades and service businesses across Perth's northern suburbs — Duncraig, Sorrento, Hillarys and around. Prices on the page, live in two weeks, no lock-in.";
+---
+
+<BaseLayout title={business.name} description={description}>
+  <!-- Hero -->
+  <section class="hero" id="top">
+    <div class="hero__bg" aria-hidden="true">
+      <span class="hero__glow"></span>
+      <span class="hero__dots"></span>
+    </div>
+
+    <div class="container hero__inner">
+      <span class="eyebrow hero__eyebrow">Perth's northern suburbs</span>
+      <h1 class="hero__title">
+        Your best work is <span class="hero__accent">invisible on Google</span>.
+      </h1>
+      <p class="hero__lead lead">
+        Someone in your suburb is searching for your trade right now. Without a
+        website, they'll ring whoever does. I build straightforward
+        sites for local trades and service businesses.
+      </p>
+      <div class="hero__actions">
+        <a href="/contact" class="btn btn--lg">Send me an enquiry</a>
+        <a href="/pricing" class="btn btn--lg btn--secondary">See what it costs</a>
+      </div>
+      <ul class="hero__proof">
+        {
+          heroTags.map((t) => (
+            <li>
+              <svg width="16" height="16" viewBox="0 0 18 18" aria-hidden="true">
+                <path d="M4 9.5 7.5 13 14 5.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              {t}
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="hero__stage">
+        <div class="hero__panel" data-hero-panel>
+          <span class="hero__panel-bar" aria-hidden="true"><span></span><span></span><span></span></span>
+          <video
+            data-hero-video
+            src="/assets/hero-brand.mp4"
+            muted
+            loop
+            playsinline
+            preload="none"
+            aria-label="Top Order Digital brand animation"
+          ></video>
+          <button type="button" class="hero__play" data-hero-play hidden>
+            <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+              <path d="M9 5.5v15l13-7.5z" fill="currentColor" />
+            </svg>
+            <span class="visually-hidden">Play the brand animation</span>
+          </button>
+        </div>
+
+        <div class="hero__float hero__float--phone" aria-hidden="true">
+          <div class="mini-site">
+            <span class="mini-site__bar"></span>
+            <span class="mini-site__eyebrow"></span>
+            <span class="mini-site__h"></span>
+            <span class="mini-site__h mini-site__h--short"></span>
+            <span class="mini-site__cta">Call now</span>
+            <span class="mini-site__row"></span>
+            <span class="mini-site__row"></span>
+          </div>
+        </div>
+
+        <div class="hero__float hero__float--card">
+          <span class="hero__notif-dot" aria-hidden="true"></span>
+          <div>
+            <strong>New enquiry</strong>
+            <span>Straight to your inbox — you reply within a day</span>
+          </div>
+        </div>
+      </div>
+      <p class="hero__reassurance fineprint">
+        I read every enquiry myself. No form replies, no call centre.
+      </p>
+    </div>
+  </section>
+
+  <!-- Recent work -->
+  <section class="section" id="work">
+    <div class="container">
+      <div class="work-head" data-reveal>
+        <div class="section-head">
+          <h2>Recent work</h2>
+          <p>
+            Sites built for local trades. Drag through them, or open the full
+            portfolio — every one is fast, reads well on a phone, and puts the
+            enquiry button where people look for it.
+          </p>
+        </div>
+        <a href="/work" class="btn btn--secondary work-head__link">
+          See the full portfolio
+        </a>
+      </div>
+
+      <WorkCarousel />
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="section" id="pricing">
+    <div class="band-dark">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <h2>What it costs</h2>
+          <p>
+            One package, and the number is right here. No quote form, no
+            discovery call before you know the price, no twelve-month lock-in.
+          </p>
+        </div>
+        <div class="pricing-wrap">
+          <PricingPanel />
+        </div>
+        <p class="pricing-note" data-reveal>
+          If your job doesn't fit inside five pages,
+          <a href={mailto("Website enquiry")}>email me</a> and I'll tell you
+          straight what it would take.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- About teaser -->
+  <section class="section about-teaser" id="about">
+    <div class="container about-teaser__grid">
+      <div class="about-teaser__card" data-reveal>
+        <img
+          src="/assets/icon-colour.png"
+          alt=""
+          width="64"
+          height="64"
+          loading="lazy"
+        />
+        <p class="about-teaser__name">{business.owner}</p>
+        <p class="muted">Duncraig · sole trader · ABN {business.abn}</p>
+        <div class="pill-row about-teaser__pills">
+          <span class="tag">Duncraig local</span>
+          <span class="tag">Marketing background</span>
+        </div>
+      </div>
+      <div data-reveal>
+        <h2>The person you'll be dealing with</h2>
+        <p class="about-teaser__body">
+          I'm Simon, and I live in Duncraig. I've spent years running marketing
+          campaigns and looking after the clients behind them, so I know what
+          actually brings enquiries in and what just looks busy. I know the
+          businesses around here because I use them — the sparkie who did our
+          kitchen, the plumber down the road — and getting them found is the
+          whole reason I started this. You'll deal with me from the first email
+          to the day the site goes live, and after.
+        </p>
+        <a href="/contact" class="btn btn--lg about-teaser__cta">
+          Email me about your business
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(2rem, 1rem + 4vw, 4rem) var(--section-y);
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero__glow {
+    position: absolute;
+    left: 50%;
+    top: -6%;
+    width: min(920px, 120%);
+    aspect-ratio: 1;
+    transform: translateX(-50%);
+    background: radial-gradient(
+      circle at center,
+      rgba(59, 84, 196, 0.16),
+      rgba(59, 84, 196, 0.05) 42%,
+      transparent 68%
+    );
+  }
+
+  .hero__dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(var(--cobalt-tint) 1.4px, transparent 1.5px);
+    background-size: 26px 26px;
+    opacity: 0.6;
+    -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 40%, #000 20%, transparent 75%);
+    mask-image: radial-gradient(ellipse 70% 55% at 50% 40%, #000 20%, transparent 75%);
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
+
+  /* staggered load-in — visible resting state, animates from it */
+  .hero__eyebrow,
+  .hero__title,
+  .hero__lead,
+  .hero__actions,
+  .hero__proof,
+  .hero__stage,
+  .hero__reassurance {
+    animation: hero-rise 0.7s var(--ease) backwards;
+  }
+  .hero__title { animation-delay: 0.06s; }
+  .hero__lead { animation-delay: 0.12s; }
+  .hero__actions { animation-delay: 0.18s; }
+  .hero__proof { animation-delay: 0.24s; }
+  .hero__stage { animation-delay: 0.3s; }
+  .hero__reassurance { animation-delay: 0.36s; }
+
+  @keyframes hero-rise {
+    from { opacity: 0; transform: translateY(16px); }
+  }
+
+  .hero__title {
+    font-size: var(--step-hero);
+    max-width: 16ch;
+    margin: 1.4rem auto 0;
+  }
+
+  .hero__accent {
+    color: var(--cobalt);
+    background-image: linear-gradient(var(--apricot), var(--apricot));
+    background-repeat: no-repeat;
+    background-position: 0 92%;
+    background-size: 100% 0.16em;
+    padding-bottom: 0.04em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  .hero__lead {
+    max-width: 36rem;
+    margin: 1.4rem auto 0;
+  }
+
+  .hero__actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 2.25rem;
+  }
+
+  .hero__proof {
+    list-style: none;
+    padding: 0;
+    margin: 1.6rem auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 22px;
+    max-width: 40rem;
+  }
+
+  .hero__proof li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--ink-muted);
+  }
+
+  .hero__proof svg {
+    color: var(--cobalt);
+    flex: none;
+  }
+
+  /* stage: main panel + overlapping floats */
+  .hero__stage {
+    position: relative;
+    max-width: 940px;
+    margin: var(--stack) auto 0;
+  }
+
+  .hero__panel {
+    position: relative;
+    background: var(--navy);
+    border-radius: var(--radius-section);
+    padding: 14px;
+    padding-top: 40px;
+    box-shadow: 0 30px 60px -12px rgba(30, 37, 89, 0.28);
+  }
+
+  .hero__panel-bar {
+    position: absolute;
+    top: 15px;
+    left: 22px;
+    display: flex;
+    gap: 7px;
+  }
+
+  .hero__panel-bar span {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.22);
+  }
+
+  .hero__panel video {
+    width: 100%;
+    border-radius: 14px;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+    /* Stands in for a poster: an unstarted video paints transparent, so the
+       logo shows through until the first frame arrives. Means the panel is
+       never an empty box when autoplay is refused. */
+    background: var(--navy) url("/assets/logo-horizontal-white.png") no-repeat center 85%;
+    background-size: min(260px, 45%);
+  }
+
+  .hero__play {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 76px;
+    height: 76px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(59, 84, 196, 0.92);
+    color: #fff;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.32);
+    transition: transform 0.18s var(--ease), background 0.18s var(--ease);
+  }
+
+  .hero__play:hover {
+    background: var(--cobalt);
+    transform: scale(1.06);
+  }
+
+  .hero__float {
+    position: absolute;
+  }
+
+  .hero__float--phone {
+    width: 168px;
+    top: -34px;
+    right: -18px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 30px;
+    box-shadow: 0 22px 44px -10px rgba(30, 37, 89, 0.28);
+    transform: rotate(5deg);
+  }
+
+  .mini-site {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 12px 16px;
+    background: var(--warm-white);
+    border-radius: 22px;
+  }
+
+  .mini-site__bar {
+    width: 100%;
+    height: 16px;
+    border-radius: 6px;
+    background: var(--cobalt);
+    margin-bottom: 4px;
+  }
+
+  .mini-site__eyebrow { width: 46%; height: 7px; border-radius: 999px; background: var(--apricot); }
+  .mini-site__h { width: 84%; height: 9px; border-radius: 999px; background: var(--navy); }
+  .mini-site__h--short { width: 58%; }
+  .mini-site__cta {
+    margin: 6px 0 4px;
+    padding: 7px 16px;
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 0.6875rem;
+    color: #fff;
+    background: var(--cobalt);
+    border-radius: 999px;
+  }
+  .mini-site__row { width: 88%; height: 6px; border-radius: 999px; background: #d9dce8; }
+
+  .hero__float--card {
+    left: -16px;
+    bottom: -30px;
+    max-width: 250px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 18px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 22px 44px -10px rgba(30, 37, 89, 0.24);
+    transform: rotate(-4deg);
+    text-align: left;
+  }
+
+  .hero__float--card strong {
+    display: block;
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--navy);
+  }
+
+  .hero__float--card span {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--ink-faint);
+  }
+
+  .hero__notif-dot {
+    flex: none;
+    width: 10px;
+    height: 10px;
+    margin-top: 5px;
+    border-radius: 999px;
+    background: var(--apricot);
+    box-shadow: 0 0 0 4px var(--apricot-tint);
+  }
+
+  .hero__reassurance {
+    margin-top: var(--stack);
+  }
+
+  @media (max-width: 820px) {
+    .hero__float--phone { width: 132px; top: -26px; right: -8px; }
+    .hero__float--card { max-width: 208px; left: -8px; bottom: -22px; padding: 13px 15px; }
+  }
+
+  @media (max-width: 560px) {
+    .hero__stage { max-width: 420px; }
+    .hero__float--phone { display: none; }
+    .hero__float--card {
+      position: static;
+      transform: none;
+      margin: 16px auto 0;
+      max-width: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__eyebrow,
+    .hero__title,
+    .hero__lead,
+    .hero__actions,
+    .hero__proof,
+    .hero__stage,
+    .hero__reassurance {
+      animation: none;
+    }
+  }
+
+  /* recent work */
+  .work-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .work-head__link {
+    flex: none;
+  }
+
+  /* pricing band */
+  .pricing-wrap {
+    margin-top: var(--stack);
+  }
+
+  .pricing-note {
+    margin-top: 1.75rem;
+    font-size: var(--step-small);
+    color: var(--on-dark-muted);
+  }
+
+  .pricing-note a {
+    color: #fff;
+    text-decoration: underline;
+  }
+
+  /* about teaser */
+  .about-teaser__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: 48px 72px;
+    align-items: center;
+  }
+
+  .about-teaser__card {
+    background: var(--cobalt-tint);
+    border-radius: var(--radius-card);
+    padding: clamp(1.75rem, 1.25rem + 2vw, 2.25rem);
+  }
+
+  .about-teaser__name {
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 1.375rem;
+    margin-top: 1.4rem;
+  }
+
+  .about-teaser__pills {
+    margin-top: 1.4rem;
+  }
+
+  .about-teaser__card .tag {
+    background: #fff;
+    color: var(--navy);
+  }
+
+  .about-teaser h2 {
+    font-size: var(--step-h2);
+  }
+
+  .about-teaser__body {
+    margin-top: 1.1rem;
+    max-width: 38rem;
+    color: var(--ink-muted);
+    line-height: 1.75;
+    font-size: var(--step-lead);
+  }
+
+  .about-teaser__cta {
+    margin-top: 1.75rem;
+  }
+
+  @media (max-width: 600px) {
+    .work-head__link,
+    .about-teaser__cta {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  // Hero video — a silent brand animation.
+  //
+  // It never autoplays on a phone: it's a 4MB file, and pulling that down
+  // uninvited on mobile data makes a liar of the "loads fast on a phone" line
+  // three paragraphs up. Small screens, reduced motion and data-saver all get
+  // the logo panel and a play button instead.
+  //
+  // On larger screens we try to autoplay, but a refused autoplay is normal and
+  // must not leave an empty box — if play() rejects we fall back to the same
+  // play button rather than swallowing the error.
+  const video = document.querySelector<HTMLVideoElement>("[data-hero-video]");
+  const playBtn = document.querySelector<HTMLButtonElement>("[data-hero-play]");
+
+  if (video && playBtn) {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const saveData = (navigator as any).connection?.saveData === true;
+    const smallScreen = window.matchMedia("(max-width: 767px)").matches;
+
+    video.muted = true;
+
+    video.addEventListener("playing", () => {
+      playBtn.hidden = true;
+    });
+
+    const start = () => {
+      video.preload = "auto";
+      video.play().then(
+        () => {
+          playBtn.hidden = true;
+        },
+        () => {
+          // autoplay refused, or the file isn't there — let them start it
+          playBtn.hidden = false;
+        }
+      );
+    };
+
+    playBtn.addEventListener("click", start);
+
+    if (smallScreen || reduce || saveData) {
+      playBtn.hidden = false;
+    } else {
+      start();
+    }
+  }
+</script>
