@@ -13,6 +13,10 @@
   "assets": {
     "directory": "./dist",
     // serve dist/404.html for unknown paths instead of a bare Cloudflare error
-    "not_found_handling": "404-page"
+    "not_found_handling": "404-page",
+    // Serve pages at "/work", not "/work/". Links, canonicals and the sitemap
+    // all omit the slash, and the default ("auto-trailing-slash") answered
+    // every one of them with a 307 redirect first.
+    "html_handling": "drop-trailing-slash"
   }
 }

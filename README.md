@@ -102,10 +102,14 @@ Dashboard (**Settings → Build configuration**):
 | Version command | `npx wrangler versions upload` |
 | Root directory | `/` |
 
-`wrangler.jsonc` declares `assets.directory: "./dist"` and serves
-`dist/404.html` for unknown paths. **Its `name` must match the Worker's real
-name**, or `wrangler deploy` silently creates a second Worker and the custom
-domain keeps serving the old one.
+`wrangler.jsonc` declares `assets.directory: "./dist"`, serves `dist/404.html`
+for unknown paths, and sets `html_handling: "drop-trailing-slash"` so pages
+answer at `/work` instead of redirecting to `/work/` — every internal link,
+canonical and sitemap URL is written without the slash. Don't swap this for
+Astro's `build.format: "file"`: that changes `Astro.url` to `/work.html` during
+the build, which breaks the canonical tags and the nav's current-page highlight.
+**Its `name` must match the Worker's real name**, or `wrangler deploy` silently
+creates a second Worker and the custom domain keeps serving the old one.
 
 Environment variables live under **Settings → Variables**: add
 `PUBLIC_WEB3FORMS_KEY` (see above).
