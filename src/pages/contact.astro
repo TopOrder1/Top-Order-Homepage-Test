@@ -42,8 +42,9 @@ const directMailto = mailto(
         <input type="hidden" name="access_key" value={web3formsKey} />
         <input type="hidden" name="subject" value="New website enquiry — Top Order Digital" />
         <input type="hidden" name="from_name" value="Top Order Digital website" />
-        <!-- honeypot -->
-        <input type="checkbox" name="botcheck" class="visually-hidden" tabindex="-1" autocomplete="off" />
+        {/* Honeypot: bots tick it. The hidden attribute keeps it away from people
+            and screen readers, who could otherwise tick it and be flagged as spam. */}
+        <input type="checkbox" name="botcheck" hidden autocomplete="off" />
 
         <div class="field">
           <label for="name">Your name</label>

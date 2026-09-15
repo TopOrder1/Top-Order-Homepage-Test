@@ -1,4 +1,4 @@
-# Cloudflare Pages redirects.
+# Redirects — honoured by Cloudflare Workers static assets.
 #
 # The site this replaced was a single page at "/", so there are no old URLs to
 # rescue — "/" still exists. These are common guesses people and old links try.

@@ -1,10 +1,22 @@
-# Cloudflare Pages — response headers
+# Response headers — honoured by Cloudflare Workers static assets.
 
+# Content-Security-Policy: the browser only loads what's listed.
+#   'self'                         this site's own files
+#   static.cloudflareinsights.com  Cloudflare's visitor analytics, which
+#   cloudflareinsights.com         Cloudflare injects into every page
+#   fonts.googleapis.com           Hanken Grotesk stylesheet
+#   fonts.gstatic.com              Hanken Grotesk font files
+#   api.web3forms.com              contact form submissions (web3forms.com is
+#                                  where a submission without JavaScript lands)
+#   style 'unsafe-inline'          a few style="" attributes in the pages
+# Anything not listed — a Google Map, YouTube embed, chat widget, Web3Forms'
+# captcha — is blocked with no visible error. Add its domains here first.
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), camera=(), microphone=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self' https://api.web3forms.com https://cloudflareinsights.com; form-action 'self' https://api.web3forms.com https://web3forms.com; frame-ancestors 'self'; base-uri 'self'; object-src 'none'
 
 # Hashed assets built by Astro — safe to cache hard
 /_astro/*

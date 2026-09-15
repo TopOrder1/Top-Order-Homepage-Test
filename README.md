@@ -39,16 +39,14 @@ site/
 │   ├── components/        Header, Footer, StickyCta, PricingPanel,
 │   │                      WorkCarousel, Faq, CtaBand
 │   └── pages/             index, work, pricing, about, contact, privacy, terms, 404
-├── public/
-│   ├── assets/            logos, hero video, portfolio screenshots
-│   ├── fonts/             Argentum Sans SemiBold (headings)
-│   ├── favicon.svg/png, apple-touch-icon.png, site.webmanifest
-│   ├── og-image.png       generated from assets-src/og-image.svg at build time
-│   ├── robots.txt
-│   ├── _redirects         common old-URL guesses → new paths
-│   └── _headers           security + cache headers
-├── assets-src/og-image.svg   source for the social share image
-└── scripts/generate-og.mjs   SVG → public/og-image.png (runs on predev/prebuild)
+└── public/
+    ├── assets/            logos, hero video, portfolio screenshots
+    ├── fonts/             Argentum Sans SemiBold (headings)
+    ├── favicon.svg/png, apple-touch-icon.png, site.webmanifest
+    ├── og-image.png       social share image (1200×630, a plain file)
+    ├── robots.txt
+    ├── _redirects         common old-URL guesses → new paths
+    └── _headers           security headers, the CSP, cache rules
 ```
 
 **To change wording, prices, the service-area list or the portfolio, edit
@@ -75,14 +73,18 @@ and receives mail before go-live.
 1. Go to web3forms.com, enter `simon@toporderdigital.com.au`, and copy the access key
    from the confirmation email.
 2. Local: `cp .env.example .env` and paste the key into `PUBLIC_WEB3FORMS_KEY`.
-3. Cloudflare: **Settings → Variables** → add
-   `PUBLIC_WEB3FORMS_KEY` with the same value (Production + Preview).
+3. Cloudflare: Worker → **Settings → Build → Build variables and secrets** → add
+   `PUBLIC_WEB3FORMS_KEY` as Text. Not the runtime **Variables and Secrets**
+   section: Astro bakes the key into the HTML at build time, so it must be a
+   build variable, and a change only takes effect on the next build (retry the
+   latest deployment after saving).
 
 The key is a public submit token — safe to expose in the built HTML. It can only
 send a message to the inbox it's registered to.
 
-Spam protection: a hidden honeypot field is already wired up. Turn on Web3Forms'
-own captcha from their dashboard if spam gets through.
+Spam protection: a hidden honeypot field is already wired up. Web3Forms' captcha
+needs their script and an hCaptcha widget on the page, so turning it on also
+means adding those domains to the Content-Security-Policy (see below).
 
 ---
 
@@ -111,10 +113,20 @@ the build, which breaks the canonical tags and the nav's current-page highlight.
 **Its `name` must match the Worker's real name**, or `wrangler deploy` silently
 creates a second Worker and the custom domain keeps serving the old one.
 
-Environment variables live under **Settings → Variables**: add
-`PUBLIC_WEB3FORMS_KEY` (see above).
+The one environment variable, `PUBLIC_WEB3FORMS_KEY`, is a **build** variable:
+**Settings → Build → Build variables and secrets** (see above).
 
 `_redirects` and `_headers` in `public/` are honoured by Workers static assets.
+
+### Content-Security-Policy
+
+`public/_headers` sends a Content-Security-Policy, so the browser only loads
+scripts, styles, fonts and connections from an allow-list: this site, Google
+Fonts, Web3Forms (the form) and Cloudflare's visitor analytics, which Cloudflare
+injects into every page. Anything else is blocked **silently** — the page just
+doesn't show it. Before adding a third-party embed (a Google Map, YouTube video,
+booking or chat widget, Web3Forms' captcha), add its domains to the policy, then
+check the browser console for "Content Security Policy" errors.
 
 ### Dependency versions are pinned
 
@@ -135,10 +147,14 @@ Console once it's connected.
 
 ## Social share image
 
-`npm run dev` / `npm run build` regenerate `public/og-image.png` (1200×630) from
-`assets-src/og-image.svg` using `sharp`. To use a custom designed image instead,
-drop a 1200×630 PNG at `public/og-image.png` and run with `OG_SKIP=1`, or remove
-the `predev` / `prebuild` scripts from `package.json`.
+`public/og-image.png` is the picture that appears when someone shares a link to
+the site (Facebook, LinkedIn, iMessage, Slack). It's a plain 1200×630 PNG: to
+change it, replace the file with another 1200×630 PNG and keep the logo and text
+clear of the edges. Networks cache these, so a new image can take a while to show
+on links that were already shared.
+
+Don't go back to generating it during the build. Cloudflare's build machine has
+none of the brand fonts, so a rendered image comes out in a stand-in font.
 
 ---
 
@@ -174,8 +190,9 @@ shadows, no hard borders on dark backgrounds.
 
 ## Still to add
 
-- **Photo of Simon** on the About page — replace the placeholder block in
-  `src/pages/about.astro` with `<img src="/assets/simon.jpg" alt="Simon Heyting" />`.
+- **Photo of Simon** on the About page — the card shows the brand icon until
+  then. Put the photo in `public/assets/` and swap it into the `<img>` at the
+  top of the about card in `src/pages/about.astro`, with real `alt` text.
 - **Portfolio demo sites** — as each trade demo is built, set its `status` to
   `"live"` and add a `shot` screenshot path in `src/data/site.ts`.
 - **Google Business Profile + Search Console** (per the brief).

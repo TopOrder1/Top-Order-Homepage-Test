@@ -1,11 +1,25 @@
 ---
 import { offer, mailto } from "../data/site";
+
+interface Props {
+  /** 2 on the pricing page, where the panel sits straight under the h1;
+      3 (default) on the homepage, under the "What it costs" h2 */
+  headingLevel?: 2 | 3;
+}
+
+const { headingLevel = 3 } = Astro.props;
 ---
 
 <article class="package" data-reveal>
   <div class="package__head">
     <span class="package__eyebrow">One package</span>
-    <h3 class="package__name">{offer.name}</h3>
+    {
+      headingLevel === 2 ? (
+        <h2 class="package__name">{offer.name}</h2>
+      ) : (
+        <h3 class="package__name">{offer.name}</h3>
+      )
+    }
     <p class="package__price">
       <span class="package__amount">{offer.price}</span>
       <span class="package__unit">{offer.unit}</span>

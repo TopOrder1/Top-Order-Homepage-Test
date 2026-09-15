@@ -4,7 +4,7 @@ import CtaBand from "../components/CtaBand.astro";
 import { business, processSteps, mailto } from "../data/site";
 
 const description =
-  "I'm Simon Heyting — a Duncraig local with years of marketing and client management behind me. I build every Top Order Digital site myself, for small businesses in Perth's northern suburbs.";
+  "I'm Simon Heyting — a Duncraig local with years in marketing and client management. I build every site myself for small businesses in Perth's northern suburbs.";
 
 const values = [
   { title: "I answer my own email", body: "Within a day, and it's me, not a form reply." },
@@ -32,10 +32,13 @@ const values = [
   <section class="section--tight">
     <div class="container about-grid">
       <aside class="about-card" data-reveal>
-        <div class="about-card__portrait">
-          {/* Swap this block for <img src="/assets/simon.jpg" alt="Simon Heyting" /> once you have a photo */}
-          <span>A photo of Simon<br />goes here</span>
-        </div>
+        {/* The brand icon, same as the homepage card, until there is a photo of Simon */}
+        <img
+          src="/assets/icon-colour.png"
+          alt=""
+          width="64"
+          height="64"
+        />
         <p class="about-card__name">{business.owner}</p>
         <p class="muted">{business.suburb} · sole trader</p>
         <ul class="about-card__contact">
@@ -147,19 +150,6 @@ const values = [
       position: sticky;
       top: calc(var(--header-h) + 24px);
     }
-  }
-
-  .about-card__portrait {
-    aspect-ratio: 4 / 5;
-    border-radius: 14px;
-    background: linear-gradient(150deg, #fff0e2, var(--apricot-tint));
-    display: grid;
-    place-items: center;
-    text-align: center;
-    color: var(--ink-faint);
-    font-family: var(--font-head);
-    font-weight: 600;
-    line-height: 1.4;
   }
 
   .about-card__name {

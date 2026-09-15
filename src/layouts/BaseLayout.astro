@@ -13,20 +13,22 @@ interface Props {
   /** hide the mobile sticky email CTA (e.g. on the contact page) */
   stickyCta?: boolean;
   stickyCtaLabel?: string;
+  /** keep the page out of search results (the 404 page) */
+  noindex?: boolean;
 }
 
 const {
   title,
   description,
-  image = "/assets/og-image.png",
+  image = "/og-image.png",
   stickyCta = true,
   stickyCtaLabel,
+  noindex = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href.replace(/\/$/, "") || Astro.site!.href;
 const ogImage = new URL(image, Astro.site).href;
-const fullTitle =
-  title === business.name ? title : `${title} · ${business.name}`;
+const fullTitle = `${title} · ${business.name}`;
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -72,9 +74,9 @@ const jsonLd = {
 
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {!noindex && <link rel="canonical" href={canonical} />}
     <meta name="author" content={business.owner} />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content={noindex ? "noindex" : "index, follow"} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
